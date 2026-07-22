@@ -383,7 +383,7 @@ function openItem(i,btn){
   } else if(it.kind==="image"){
     html+='<h3>👀 請注意看圖片，答案就在圖片中！</h3>'+
       '<div class="toggleBox show hidebox"><button class="btn beige" onclick="tog(this)">關主：隱藏／顯示圖片</button>'+
-      '<div class="togContent"><img class="qimg" src="images/'+it.img+'" alt="題目圖片"></div></div>'+
+      '<div class="togContent"><img class="qimg" src="images/'+it.img+'?v=2" alt="題目圖片"></div></div>'+
       '<p class="audionote">先讓大家看圖片找答案；按「公布題目」時會自動把圖片收起來。</p>'+
       '<div class="toggleBox"><button class="btn accent" onclick="publish(this)">📣 公布題目</button>'+
       '<div class="togContent">'+
