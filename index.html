@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大衛的五顆石頭 ─ 互動關卡（版本 D）</title>
+<style>
+  :root{
+    --bg:#0f1b2d; --panel:#16263d; --ink:#f4f7fb; --muted:#9fb3cc;
+    --c-pray:#e5484d; --c-bible:#f5a623; --c-worship:#30a46c; --c-fellow:#3b82f6; --c-spirit:#f4eedc;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;}
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%,#1e3454,#0f1b2d 60%);
+    color:var(--ink); min-height:100%; overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 64px;}
+  header.top{text-align:center;margin:14px 0 26px;}
+  header.top h1{font-size:clamp(26px,4.5vw,44px);margin:0;letter-spacing:2px;}
+  header.top p{color:var(--muted);margin:8px 0 0;font-size:clamp(13px,2vw,17px);}
+  .verse{color:#ffd479;font-weight:700;}
+  .verB{display:inline-block;margin-left:8px;background:#26405f;color:#cfe0f5;
+        font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;letter-spacing:1px;vertical-align:middle;}
+
+  .bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+  .btn{cursor:pointer;border:none;border-radius:999px;padding:10px 18px;font-size:15px;
+       font-family:inherit;font-weight:700;color:#fff;background:#26405f;transition:.15s;}
+  .btn:hover{filter:brightness(1.12);}
+  .btn.ghost{background:transparent;border:1px solid #34537a;color:var(--muted);}
+  .crumb{color:var(--muted);font-size:15px;}
+  .crumb b{color:var(--ink);}
+
+  .screen{display:none;animation:fade .25s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  @media(max-width:640px){.cards{grid-template-columns:1fr;}}
+  .card{position:relative;border-radius:22px;padding:34px 28px;cursor:pointer;color:#fff;
+        min-height:160px;display:flex;flex-direction:column;justify-content:space-between;
+        box-shadow:0 14px 34px rgba(0,0,0,.35);transition:.18s;overflow:hidden;}
+  .card:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(0,0,0,.5);}
+  .card .stone{position:absolute;right:-10px;top:-18px;font-size:120px;opacity:.16;}
+  .card .name{font-size:30px;font-weight:900;letter-spacing:3px;}
+  .card .en{opacity:.85;font-size:15px;margin-top:2px;letter-spacing:1px;}
+  .card .go{align-self:flex-end;font-size:15px;font-weight:700;opacity:.9;}
+  .card .mode{position:absolute;left:28px;bottom:26px;font-size:13px;font-weight:700;
+        background:rgba(255,255,255,.22);padding:4px 12px;border-radius:999px;}
+  .card.pray{background:linear-gradient(135deg,#e5484d,#a3262b);}
+  .card.bible{background:linear-gradient(135deg,#f5a623,#c47b00);}
+  .card.worship{background:linear-gradient(135deg,#30a46c,#1d6b46);}
+  .card.fellow{background:linear-gradient(135deg,#3b82f6,#1d4ed8);}
+  .card.spirit{background:#f4eedc;color:#1f2d44;grid-column:1/-1;min-height:130px;border:1px solid #e6dcc0;}
+  .card.spirit .en{opacity:.65;}
+  .card.spirit .go{opacity:.7;}
+  .card.spirit .stone{opacity:.10;}
+  .card.spirit .mode{background:#ebe3cf;color:#5a5238;}
+
+  .cat-title{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .dot{width:22px;height:22px;border-radius:50%;}
+  .cat-title h2{margin:0;font-size:clamp(24px,4vw,34px);letter-spacing:2px;}
+  .cat-sub{color:var(--muted);font-size:14px;margin:0 0 22px;line-height:1.7;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:560px;margin:0 auto;}
+  @media(max-width:560px){.grid{gap:12px;}}
+  .num{aspect-ratio:1/1;border-radius:18px;border:none;cursor:pointer;color:#fff;
+       font-family:inherit;font-weight:900;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;
+       box-shadow:0 8px 20px rgba(0,0,0,.3);transition:.15s;}
+  .num .n{font-size:clamp(26px,7vw,44px);line-height:1;}
+  .num .stars{font-size:13px;margin-top:6px;letter-spacing:1px;opacity:.95;}
+  .num:hover{transform:translateY(-3px);filter:brightness(1.1);}
+  .num.light{color:#1f2d44;border:2px solid #d4dbe6;box-shadow:0 8px 20px rgba(0,0,0,.18);}
+  .num.used{background:#33445c !important;color:#7e94ad !important;border-color:#33445c !important;box-shadow:none;}
+  .num.used .stars{opacity:.5;}
+  .num.used::after{content:"已選";position:absolute;bottom:8px;font-size:12px;font-weight:700;letter-spacing:1px;}
+  .num .check{position:absolute;top:6px;right:10px;font-size:18px;display:none;}
+  .num.used .check{display:block;color:#5ad18f;}
+  .legend{text-align:center;color:var(--muted);font-size:13px;margin-top:18px;line-height:1.8;}
+
+  .overlay{position:fixed;inset:0;background:rgba(6,12,22,.72);backdrop-filter:blur(3px);
+           display:none;align-items:center;justify-content:center;padding:22px;z-index:50;}
+  .overlay.active{display:flex;animation:fade .2s ease;}
+  .modal{background:var(--panel);border-radius:24px;max-width:680px;width:100%;
+         max-height:90vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.6);
+         border-top:8px solid var(--accent);}
+  .modal .mhead{display:flex;align-items:center;justify-content:space-between;padding:22px 26px 6px;}
+  .modal .tag{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:16px;flex-wrap:wrap;}
+  .modal .tag .mdot{width:16px;height:16px;border-radius:50%;}
+  .modal .qno{background:var(--accent);color:#fff;border-radius:12px;padding:4px 14px;font-weight:900;font-size:20px;}
+  .modal.light .qno{color:#1f2d44;}
+  .modal.light .mdot{box-shadow:0 0 0 2px #44557a;}
+  .diff{display:inline-flex;align-items:center;gap:6px;background:#0f2036;border:1px solid #2b466a;
+        border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700;color:#ffd479;}
+  .diff .grade{color:var(--muted);font-weight:600;}
+  .modal .body{padding:8px 26px 10px;}
+  .modal h3{font-size:clamp(20px,3.4vw,26px);line-height:1.5;margin:14px 0 12px;}
+  .lbl{font-weight:800;margin:6px 0 8px;}
+  .recite{background:#0f2036;border:1px solid #2b466a;border-radius:14px;
+          padding:16px 18px;line-height:2;font-size:17px;color:#e9eff7;margin:10px 0;}
+  .prayerbox{background:#132a44;border:1px solid #2c4f87;border-radius:14px;
+          padding:16px 18px;line-height:1.9;font-size:17px;color:#e7f0fb;margin:10px 0;font-style:italic;}
+  .prayerbox .pref{display:block;margin-top:10px;color:var(--muted);font-size:14px;font-style:normal;}
+  .ask{font-weight:800;font-size:18px;margin:14px 0 4px;}
+  .cond{display:flex;gap:10px;align-items:flex-start;background:#13301f;border:1px solid #2c6a44;
+        color:#bff0d2;border-radius:12px;padding:12px 16px;font-size:15px;margin-top:14px;line-height:1.7;}
+  .cond.fellow{background:#142640;border-color:#2c4f87;color:#bcd5f7;}
+  .toggleBox{margin-top:14px;}
+  .toggleBox > .togContent{display:none;}
+  .toggleBox.show > .togContent{display:block;}
+  .btn.accent{background:var(--accent);}
+  .modal.light .btn.accent{color:#1f2d44;}
+  .btn.beige{background:#e8e3d5;color:#3f3a2c;border:1px solid #cbc4b0;}
+  .ans{margin-top:10px;background:#2a1722;border:1px solid #6a2c45;color:#ffc4d8;
+       border-radius:12px;padding:12px 16px;font-size:17px;line-height:1.8;}
+  .ans.verse{background:#0f2036;border-color:#2b466a;color:#e9eff7;}
+  .ans .full{display:block;margin-top:8px;color:var(--muted);font-size:15px;}
+  audio{width:100%;margin-top:8px;}
+  .audionote{color:var(--muted);font-size:13px;margin-top:8px;line-height:1.6;}
+  .mfoot{padding:6px 26px 22px;text-align:center;}
+  .x{cursor:pointer;font-size:26px;line-height:1;color:var(--muted);border:none;background:none;}
+  .x:hover{color:#fff;}
+  .resetbar{text-align:center;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>🪨 大衛的五顆石頭 <span class="verB">版本 D</span></h1>
+    <p>主題經文：撒母耳記上 17:4–49 ｜ <span class="verse">上帝賜的力量，使我得勝！</span></p>
+  </header>
+
+  <!-- ===== HOME ===== -->
+  <section id="home" class="screen active">
+    <div class="cards" id="home-cards"></div>
+    <div class="resetbar"><button class="btn ghost" onclick="resetAll()">🔄 重設所有「已選」記錄</button></div>
+  </section>
+
+  <!-- ===== NUMBER GRID ===== -->
+  <section id="grid" class="screen">
+    <div class="bar">
+      <button class="btn" onclick="go('home')">⟵ 回主頁</button>
+      <button class="btn ghost" onclick="clearCurrent()">🧹 清除此主題已選</button>
+      <span class="crumb"><b id="g-name"></b></span>
+    </div>
+    <div class="cat-title"><span class="dot" id="g-dot"></span><h2 id="g-h2"></h2></div>
+    <p class="cat-sub" id="g-sub"></p>
+    <div class="grid" id="g-grid"></div>
+    <div class="legend" id="g-legend"></div>
+  </section>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <div class="mhead">
+      <span class="tag"><span class="mdot" id="m-dot"></span><span id="m-tag"></span> <span class="qno" id="m-no"></span></span>
+      <button class="x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="body" id="m-body"></div>
+    <div class="mfoot"><button class="btn ghost" onclick="closeModal()">⟵ 返回號碼選單</button></div>
+  </div>
+</div>
+
+<script>
+/* ================= DATA（版本 B） ================= */
+const THEMES = [
+ { key:"pray", name:"禱告", en:"PRAYER", icon:"🙏", color:"#e5484d", graded:true, mode:"難度分級 · 9 題",
+   sub:"難度分三段：★ 題 1–3（1·2 年級）、★★ 題 4–6（3·4 年級）、★★★ 題 7–9（5·6 年級）。",
+   items:[
+     {star:1, kind:"card",
+      prayer:"我們在天上的父，願人都尊你的名為聖。願你的國降臨，願你的旨意行在地上，如同行在天上。",
+      ref:"馬太福音 6:9–10（主禱文）",
+      ask:"主禱文一開始，是怎麼稱呼神的？", a:"我們在天上的父"},
+     {star:1, kind:"card",
+      prayer:"萬軍之耶和華啊，你若垂顧婢女的苦情……賜我一個兒子，我必使他終身歸與耶和華。",
+      ref:"撒母耳記上 1:11（哈拿的禱告）",
+      ask:"哈拿向神求什麼？", a:"一個兒子（並且要把孩子獻給神）"},
+     {star:1, kind:"card",
+      prayer:"神啊，開恩可憐我這個罪人！",
+      ref:"路加福音 18:13（稅吏的禱告）",
+      ask:"稅吏低著頭、捶著胸，向神說了什麼？", a:"神啊，開恩可憐我這個罪人"},
+     {star:2, kind:"card",
+      prayer:"神啊，求你為我造清潔的心，使我裡面重新有正直的靈。",
+      ref:"詩篇 51:10（大衛悔罪的禱告）",
+      ask:"大衛求神為他造一顆怎樣的心？", a:"清潔的心"},
+     {star:2, kind:"card",
+      prayer:"求你賜我智慧，可以判斷你的民，能辨別是非。",
+      ref:"列王紀上 3:9（所羅門的禱告）",
+      ask:"所羅門沒有求財富或長壽，他向神求什麼？", a:"智慧（能辨別是非、治理百姓的心）"},
+     {star:2, kind:"card",
+      prayer:"甚願你賜福與我，擴張我的境界，願你的手常與我同在，保佑我不遭患難。",
+      ref:"歷代志上 4:10（雅比斯的禱告）",
+      ask:"雅比斯求神賜福，並且「擴張」他的什麼？", a:"境界（地界／範圍）"},
+     {star:3, kind:"card",
+      prayer:"我父啊，倘若可行，求你叫這杯離開我；然而不要照我的意思，只要照你的意思。",
+      ref:"馬太福音 26:39（耶穌在客西馬尼園的禱告）",
+      ask:"耶穌禱告說「不要照我的意思」，要照誰的意思？", a:"照父神（你）的意思"},
+     {star:3, kind:"card",
+      prayer:"耶和華啊，求你應允我，應允我！使這民知道你─耶和華─是神。",
+      ref:"列王紀上 18:37（以利亞的禱告）",
+      ask:"以利亞禱告後，神從天上降下什麼，證明祂是真神？", a:"火（從天降火燒盡祭物）"},
+     {star:3, kind:"card",
+      prayer:"父啊，赦免他們！因為他們所做的，他們不曉得。",
+      ref:"路加福音 23:34（耶穌在十字架上的禱告）",
+      ask:"耶穌被釘十字架時，為傷害祂的人禱告，求父做什麼？", a:"赦免他們"}
+   ]
+ },
+ { key:"bible", name:"聖經", en:"BIBLE", icon:"📖", color:"#f5a623", graded:true, mode:"難度分級 · 9 題",
+   sub:"難度分三段：★ 題 1–3（1·2 年級）、★★ 題 4–6（3·4 年級）、★★★ 題 7–9（5·6 年級）。",
+   items:[
+     {star:1, kind:"plain", q:"大衛本來的工作是什麼？", a:"牧羊人（替父親放羊）"},
+     {star:1, kind:"plain", q:"大衛打敗的巨人叫什麼名字？", a:"歌利亞"},
+     {star:1, kind:"fill", label:"經文挖空（請把空格填出來）",
+      prompt:"約翰一書 4:19 —「我們愛，因為OOO我O。」", a:"神先愛…們", full:"我們愛，因為神先愛我們。"},
+     {star:2, kind:"fill", label:"經文挖空（請把空格填出來）",
+      prompt:"腓立比書 4:13 —「我靠著那OOOOOO，OOOO做。」", a:"加給我力量的；凡事都能", full:"我靠著那加給我力量的，凡事都能做。"},
+     {star:2, kind:"plain", q:"大衛年輕的時代，當時以色列的王是誰？", a:"掃羅（掃羅王）"},
+     {star:2, kind:"plain", q:"大衛年輕時被哪位先知膏立為王？", a:"撒母耳"},
+     {star:3, kind:"plain", q:"新約四卷福音書是哪四卷？", a:"馬太福音、馬可福音、路加福音、約翰福音"},
+     {star:3, kind:"plain", q:"聖經總共有幾卷書？", a:"66 卷（舊約 39 卷＋新約 27 卷）"},
+     {star:3, kind:"fill", label:"經文挖空（請把空格填出來）",
+      prompt:"約書亞記 1:9 —「你當剛OOO！不要OO，也不要OO，因為……OOO你的神必與你同在。」",
+      a:"強壯膽／懼怕／驚惶／耶和華", full:"你當剛強壯膽！不要懼怕，也不要驚惶，因為你無論往哪裡去，耶和華你的神必與你同在。"}
+   ]
+ },
+ { key:"worship", name:"敬拜", en:"WORSHIP", icon:"🎵", color:"#30a46c", graded:false, mode:"聽前奏猜歌 · 9 題",
+   sub:"聽前奏，猜歌名，猜對即過關！",
+   items:[
+     {kind:"worship", song:"滿有能力", audio:"敬拜_1.m4a"},
+     {kind:"worship", song:"你很特別", audio:"敬拜_2.m4a"},
+     {kind:"worship", song:"雲上太陽", audio:"敬拜_3.m4a"},
+     {kind:"worship", song:"有一位神", audio:"敬拜_4.m4a"},
+     {kind:"worship", song:"耶和華是我牧者", audio:"敬拜_5.m4a"},
+     {kind:"worship", song:"震動天地", audio:"敬拜_6.m4a"},
+     {kind:"worship", song:"耶穌愛你", audio:"敬拜_7.m4a"},
+     {kind:"worship", song:"I can do it", audio:"敬拜_8.m4a"},
+     {kind:"worship", song:"我們愛 [讓世界不一樣]", audio:"敬拜_9.m4a"}
+   ]
+ },
+ { key:"fellow", name:"教會團契", en:"FELLOWSHIP", icon:"🤝", color:"#3b82f6", graded:false, mode:"你了解隊友嗎 · 9 題",
+   sub:"關主指定、或讓小朋友自己選一位「題目對象」，把題目中的「___」換成那個人的名字來作答，最後由本人確認對錯。",
+   items:[
+     {kind:"fellow", q:"___ 的全名（國字）怎麼唸？", cond:"由本人確認讀音正確即過關。"},
+     {kind:"fellow", q:"請說出隊上所有敵隊隊員的名字。", cond:"由關主／敵隊確認，全部答出即過關。"},
+     {kind:"fellow", mark:true, q:"___ 今年幾歲？（正負 3 歲即可）", cond:"由本人確認，誤差 ±3 歲內即算對。"},
+     {kind:"fellow", q:"___ 的生日是幾月？", cond:"由本人確認對錯。"},
+     {kind:"fellow", q:"___ 有幾個兄弟姊妹？", cond:"由本人確認對錯。"},
+     {kind:"fellow", q:"___ 是哪裡人？（例如：台北人）", cond:"由本人確認對錯。"},
+     {kind:"fellow", q:"___ 在家裡排行老幾？（老大／老二／老么…）", cond:"由本人確認對錯。"},
+     {kind:"fellow", q:"___ 的手機殼是什麼顏色的？（面積最大的顏色）", cond:"由本人確認對錯。"},
+     {kind:"fellow", q:"___ 的包包是哪一個？", cond:"由本人指認確認。"}
+   ]
+ },
+ { key:"spirit", name:"聖靈的引導", en:"THE HOLY SPIRIT", icon:"🕊️", color:"#f4eedc", light:true, graded:true, mode:"難度分級 · 9 題",
+   sub:"難度分三段：★ 題 1–3（1·2 年級）、★★ 題 4–6（3·4 年級）、★★★ 題 7–9（5·6 年級）。",
+   items:[
+     {star:1, kind:"plain", q:"聖靈像什麼鳥降在耶穌身上？", a:"鴿子"},
+     {star:1, kind:"plain", q:"撒母耳膏立大衛時，把什麼倒在他頭上，從那天起耶和華的靈就大大感動他？", a:"膏油（角裡的膏油）"},
+     {star:1, kind:"plain", q:"聖靈的果子有九種，請說出其中三種。", a:"仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制（任三種）"},
+     {star:2, kind:"plain", q:"五旬節那天門徒被聖靈充滿後，開始說起什麼，叫各國的人都聽懂？", a:"別國的話（方言）"},
+     {star:2, kind:"plain", q:"保羅說，人若「順著聖靈而行」，就不會放縱什麼的私慾？", a:"肉體"},
+     {star:2, kind:"plain", q:"聖靈的果子有九種，請說出其中六種。", a:"仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制（任六種）"},
+     {star:3, kind:"plain", q:"聖靈像什麼一樣，隨意思吹，聽見響聲卻不知從哪來？", a:"風（約翰福音 3:8）"},
+     {star:3, kind:"plain", q:"聖靈住在我們裡面，成為我們將來得基業的什麼？", a:"憑據／印記"},
+     {star:3, kind:"plain", q:"聖靈的果子記載在聖經的哪一卷書？", a:"加拉太書（加拉太書 5:22–23）"}
+   ]
+ }
+];
+
+const GRADE = {1:"1·2 年級", 2:"3·4 年級", 3:"5·6 年級"};
+function stars(n){ return "★".repeat(n); }
+
+/* ================= STATE ================= */
+let curKey="pray";
+const KEY="stones_visited_D_v1";
+let visited = JSON.parse(localStorage.getItem(KEY) || "{}");
+function saveVisited(){ localStorage.setItem(KEY, JSON.stringify(visited)); }
+function vkey(k,n){ return k+"_"+n; }
+function theme(k){ return THEMES.find(t=>t.key===k); }
+
+/* ================= NAV ================= */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ---- HOME cards ---- */
+function buildHome(){
+  const wrap=document.getElementById('home-cards');
+  wrap.innerHTML="";
+  THEMES.forEach(t=>{
+    const cls = t.key==="pray"?"pray":t.key==="bible"?"bible":t.key==="worship"?"worship":t.key==="fellow"?"fellow":"spirit";
+    const div=document.createElement('div');
+    div.className="card "+cls;
+    div.onclick=()=>openTheme(t.key);
+    div.innerHTML='<span class="stone">'+t.icon+'</span>'+
+      '<div><div class="name">'+t.name+'</div><div class="en">'+t.en+'</div></div>'+
+      '<span class="mode">'+t.mode+'</span>'+
+      '<div class="go">點我進入 ➜</div>';
+    wrap.appendChild(div);
+  });
+}
+
+function openTheme(k){
+  curKey=k; const t=theme(k);
+  document.documentElement.style.setProperty('--accent',t.color);
+  document.getElementById('g-name').textContent=t.name;
+  document.getElementById('g-h2').textContent=t.name;
+  document.getElementById('g-dot').style.background=t.color;
+  document.getElementById('g-sub').textContent=t.sub;
+  document.getElementById('g-legend').innerHTML =
+    "點擊號碼查看內容；點過的號碼會變灰並標示「已選」。點錯了可用上方「清除此主題已選」。";
+  const grid=document.getElementById('g-grid'); grid.innerHTML="";
+  t.items.forEach((it,i)=>{
+    const b=document.createElement('button');
+    b.className='num'; b.style.background=t.color;
+    if(t.light) b.classList.add('light');
+    let inner='<span class="check">✓</span><span class="n">'+(i+1)+'</span>';
+    if(t.graded && it.star) inner+='<span class="stars">'+stars(it.star)+'</span>';
+    b.innerHTML=inner;
+    if(visited[vkey(k,i)]) b.classList.add('used');
+    b.onclick=()=>openItem(i,b);
+    grid.appendChild(b);
+  });
+  go('grid');
+}
+
+function clearCurrent(){
+  const t=theme(curKey);
+  if(!confirm('確定清除「'+t.name+'」的所有已選記錄嗎？')) return;
+  t.items.forEach((_,i)=>delete visited[vkey(curKey,i)]);
+  saveVisited(); openTheme(curKey);
+}
+
+/* ================= MODAL ================= */
+function tog(btn){ btn.parentElement.classList.toggle('show'); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function openItem(i,btn){
+  const t=theme(curKey); const it=t.items[i];
+  visited[vkey(curKey,i)]=true; saveVisited();
+  if(btn) btn.classList.add('used');
+
+  document.documentElement.style.setProperty('--accent',t.color);
+  document.getElementById('modal').classList.toggle('light', !!t.light);
+  document.getElementById('m-dot').style.background=t.color;
+  document.getElementById('m-tag').textContent = t.name;
+  document.getElementById('m-no').textContent = (i+1);
+
+  let html='';
+  if(t.graded && it.star){
+    html+='<div class="diff">'+stars(it.star)+'<span class="grade">'+GRADE[it.star]+'</span></div>';
+  }
+
+  if(it.kind==="fill"){
+    html+='<div class="lbl" style="color:'+t.color+'">✏️ '+esc(it.label)+'</div>'+
+      '<div class="recite">'+esc(it.prompt)+'</div>'+
+      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
+      '<div class="togContent"><div class="ans verse">✅ '+esc(it.a)+
+      (it.full?'<span class="full">（完整：'+esc(it.full)+'）</span>':'')+'</div></div></div>';
+  } else if(it.kind==="card"){
+    html+='<h3>🔊 請注意看／聽禱告詞，問題就在禱告中！</h3>'+
+      '<div class="toggleBox show"><button class="btn beige" onclick="tog(this)">關主：隱藏／顯示禱告詞</button>'+
+      '<div class="togContent"><div class="prayerbox">「'+esc(it.prayer)+'」'+(it.ref?'<span class="pref">—— '+esc(it.ref)+'</span>':'')+'</div></div></div>'+
+      '<p class="audionote">禱告詞可先讓大家看、或由關主念出；出題前顯示都 OK。準備好後按「公布題目」再出題。</p>'+
+      '<div class="toggleBox"><button class="btn accent" onclick="tog(this)">📣 公布題目</button>'+
+      '<div class="togContent">'+
+        '<div class="ask">❓ 提問：'+esc(it.ask)+'</div>'+
+        '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
+        '<div class="togContent"><div class="ans">✅ '+esc(it.a)+'</div></div></div>'+
+      '</div></div>';
+  } else if(it.kind==="worship"){
+    html+='<h3>🎧 聽前奏，猜歌名！</h3>'+
+      '<audio controls preload="none" src="audio/'+it.audio+'"></audio>'+
+      '<div class="cond">🎯 完成條件：猜對歌名。</div>'+
+      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏歌名</button>'+
+      '<div class="togContent"><div class="ans">🎵 '+esc(it.song)+'</div></div></div>';
+  } else if(it.kind==="fellow"){
+    html+='<h3>'+(it.mark?'🚩 ':'')+esc(it.q)+'</h3>'+
+      '<div class="cond fellow">✅ '+esc(it.cond)+'</div>';
+  } else { /* plain / write */
+    html+='<h3>'+esc(it.q||it.prompt)+'</h3>'+
+      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
+      '<div class="togContent"><div class="ans">✅ '+esc(it.a)+'</div></div></div>';
+  }
+
+  document.getElementById('m-body').innerHTML=html;
+  document.getElementById('overlay').classList.add('active');
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('active');
+  if(document.getElementById('grid').classList.contains('active')) openTheme(curKey);
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeModal(); });
+
+/* ================= RESET ALL ================= */
+function resetAll(){
+  if(confirm('確定要清除「所有主題」的已選記錄嗎？')){
+    visited={}; saveVisited(); alert('已重設！');
+  }
+}
+
+/* ================= INIT ================= */
+buildHome();
+</script>
+</body>
+</html>
