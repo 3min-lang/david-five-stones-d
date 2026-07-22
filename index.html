@@ -105,6 +105,12 @@
   .prayerbox .pref{display:block;margin-top:10px;color:var(--muted);font-size:14px;font-style:normal;}
   .ask{font-weight:800;font-size:18px;margin:14px 0 4px;}
   img.qimg{width:100%;max-height:60vh;object-fit:contain;border-radius:14px;border:1px solid #2b466a;margin:10px 0;display:block;background:#0f2036;}
+  .opts{margin:12px 0 4px;display:grid;gap:9px;}
+  .opt{background:#0f2036;border:1px solid #2b466a;border-radius:12px;padding:11px 15px;font-size:16px;
+       line-height:1.6;color:#e9eff7;display:flex;gap:12px;align-items:flex-start;}
+  .opt .ol{font-weight:900;color:var(--accent);min-width:22px;}
+  .modal.light .opt{color:#22314c;}
+  .modal.light .opt .ol{color:#1f2d44;}
   .cond{display:flex;gap:10px;align-items:flex-start;background:#13301f;border:1px solid #2c6a44;
         color:#bff0d2;border-radius:12px;padding:12px 16px;font-size:15px;margin-top:14px;line-height:1.7;}
   .cond.fellow{background:#142640;border-color:#2c4f87;color:#bcd5f7;}
@@ -174,71 +180,94 @@ const THEMES = [
      {star:1, kind:"card",
       prayer:"我們在天上的父，願人都尊你的名為聖。願你的國降臨，願你的旨意行在地上，如同行在天上。",
       ref:"馬太福音 6:9–10（主禱文）",
-      ask:"主禱文一開始，是怎麼稱呼神的？", a:"我們在天上的父"},
+      ask:"主禱文一開始，是怎麼稱呼神的？",
+      opts:["我們在天上的父","萬軍之耶和華","創造天地的主","以上皆是"], correct:0},
      {star:1, kind:"card",
       prayer:"萬軍之耶和華啊，你若垂顧婢女的苦情……賜我一個兒子，我必使他終身歸與耶和華。",
       ref:"撒母耳記上 1:11（哈拿的禱告）",
-      ask:"哈拿向神求什麼？", a:"一個兒子（並且要把孩子獻給神）"},
+      ask:"哈拿向神求什麼？",
+      opts:["財富","一個兒子","長壽","智慧"], correct:1},
      {star:1, kind:"card",
       prayer:"神啊，開恩可憐我這個罪人！",
       ref:"路加福音 18:13（稅吏的禱告）",
-      ask:"稅吏低著頭、捶著胸，向神說了什麼？", a:"神啊，開恩可憐我這個罪人"},
+      ask:"稅吏低著頭、捶著胸，向神說了什麼？",
+      opts:["神啊，我感謝你","神啊，求你賜福給我","神啊，開恩可憐我這個罪人","神啊，求你聽我禱告"], correct:2},
      {star:2, kind:"card",
       prayer:"神啊，求你為我造清潔的心，使我裡面重新有正直的靈。",
       ref:"詩篇 51:10（大衛悔罪的禱告）",
-      ask:"大衛求神為他造一顆怎樣的心？", a:"清潔的心"},
+      ask:"大衛求神為他造一顆怎樣的心？",
+      opts:["剛強的心","清潔的心","喜樂的心","智慧的心"], correct:1},
      {star:2, kind:"card",
       prayer:"求你賜我智慧，可以判斷你的民，能辨別是非。",
       ref:"列王紀上 3:9（所羅門的禱告）",
-      ask:"所羅門沒有求財富或長壽，他向神求什麼？", a:"智慧（能辨別是非、治理百姓的心）"},
+      ask:"所羅門沒有求財富或長壽，他向神求什麼？",
+      opts:["能辨別是非的智慧","強大的軍隊","更多的財寶","以上皆是"], correct:0},
      {star:2, kind:"card",
       prayer:"甚願你賜福與我，擴張我的境界，願你的手常與我同在，保佑我不遭患難。",
       ref:"歷代志上 4:10（雅比斯的禱告）",
-      ask:"雅比斯求神賜福，並且「擴張」他的什麼？", a:"境界（地界／範圍）"},
+      ask:"雅比斯求神賜福，並且「擴張」他的什麼？",
+      opts:["財產","名聲","境界（地界）","家族人數"], correct:2},
      {star:3, kind:"card",
       prayer:"我父啊，倘若可行，求你叫這杯離開我；然而不要照我的意思，只要照你的意思。",
       ref:"馬太福音 26:39（耶穌在客西馬尼園的禱告）",
-      ask:"耶穌禱告說「不要照我的意思」，要照誰的意思？", a:"照父神（你）的意思"},
+      ask:"耶穌禱告說「不要照我的意思」，要照誰的意思？",
+      opts:["自己的意思","門徒的意思","父神的意思","眾人的意思"], correct:2},
      {star:3, kind:"card",
       prayer:"耶和華啊，求你應允我，從天上降下火來，使這民知道你─耶和華─是神！",
       ref:"列王紀上 18:36–38（以利亞在迦密山的禱告）",
-      ask:"以利亞禱告後，神從天上降下什麼，證明祂是真神？", a:"火（從天降火燒盡祭物）"},
+      ask:"以利亞禱告後，神從天上降下什麼，證明祂是真神？",
+      opts:["天使","火","閃電","大水"], correct:1},
      {star:3, kind:"card",
       prayer:"父啊，赦免他們！因為他們所做的，他們不曉得。",
       ref:"路加福音 23:34（耶穌在十字架上的禱告）",
-      ask:"耶穌被釘十字架時，為傷害祂的人禱告，求父做什麼？", a:"赦免他們"}
+      ask:"耶穌被釘十字架時，為傷害祂的人禱告，求父做什麼？",
+      opts:["懲罰他們","赦免他們","審判他們","忘記他們"], correct:1}
    ]
  },
  { key:"bible", name:"聖經", en:"BIBLE", icon:"📖", color:"#f5a623", graded:true, mode:"難度分級 · 9 題",
    sub:"難度分三段：★ 題 1–3（1·2 年級）、★★ 題 4–6（3·4 年級）、★★★ 題 7–9（5·6 年級）。",
    items:[
-     {star:1, kind:"plain", q:"大衛本來的工作是什麼？", a:"牧羊人（替父親放羊）"},
-     {star:1, kind:"plain", q:"大衛打敗的巨人叫什麼名字？", a:"歌利亞"},
-     {star:1, kind:"fill", label:"經文挖空（請把空格填出來）",
-      prompt:"約翰一書 4:19 —「我們愛，因為OOO我O。」", a:"神先愛…們", full:"我們愛，因為神先愛我們。"},
-     {star:2, kind:"fill", label:"經文挖空（請把空格填出來）",
-      prompt:"腓立比書 4:13 —「我靠著那OOOOOO，OOOO做。」", a:"加給我力量的；凡事都能", full:"我靠著那加給我力量的，凡事都能做。"},
-     {star:2, kind:"plain", q:"大衛年輕的時代，當時以色列的王是誰？", a:"掃羅（掃羅王）"},
-     {star:2, kind:"plain", q:"大衛年輕時被哪位先知膏立為王？", a:"撒母耳"},
-     {star:3, kind:"plain", q:"新約四卷福音書是哪四卷？", a:"馬太福音、馬可福音、路加福音、約翰福音"},
-     {star:3, kind:"plain", q:"聖經總共有幾卷書？", a:"66 卷（舊約 39 卷＋新約 27 卷）"},
-     {star:3, kind:"fill", label:"經文挖空（請把空格填出來）",
-      prompt:"約書亞記 1:9 —「你當剛OOO！不要OO，也不要OO，因為……OOO你的神必與你同在。」",
-      a:"強壯膽／懼怕／驚惶／耶和華", full:"你當剛強壯膽！不要懼怕，也不要驚惶，因為你無論往哪裡去，耶和華你的神必與你同在。"}
+     {star:1, kind:"plain", q:"大衛本來的工作是什麼？",
+      opts:["農夫","牧羊人","鐵匠","漁夫"], correct:1},
+     {star:1, kind:"plain", q:"大衛打敗的巨人叫什麼名字？",
+      opts:["參孫","掃羅","歌利亞","尼布甲尼撒"], correct:2},
+     {star:1, kind:"plain", q:"約翰一書 4:19：「我們愛，因為＿＿＿＿。」空格是什麼？",
+      opts:["神先愛我們","我們先愛神","愛能遮掩許多的罪","神就是愛"], correct:0},
+     {star:2, kind:"plain", q:"腓立比書 4:13：「我靠著那加給我力量的，＿＿＿＿做。」空格是什麼？",
+      opts:["凡事都能","什麼都不能","只有善事能","靠自己才能"], correct:0},
+     {star:2, kind:"plain", q:"大衛年輕的時代，當時以色列的王是誰？",
+      opts:["所羅門","掃羅","大衛自己","希律王"], correct:1},
+     {star:2, kind:"plain", q:"大衛年輕時被哪位先知膏立為王？",
+      opts:["以利亞","先知拿單","撒母耳","摩西"], correct:2},
+     {star:3, kind:"plain", q:"新約四卷福音書是哪四卷？",
+      opts:["馬太、馬可、路加、約翰","創世記、出埃及記、利未記、民數記","羅馬書、哥林多前書、加拉太書、以弗所書","以上皆是"], correct:0},
+     {star:3, kind:"plain", q:"聖經總共有幾卷書？",
+      opts:["39 卷","27 卷","66 卷","100 卷"], correct:2},
+     {star:3, kind:"plain", q:"約書亞記 1:9：「你當＿＿＿＿！不要懼怕，也不要驚惶。」神給約書亞的勉勵是什麼？",
+      opts:["剛強壯膽","謙卑順服","安靜等候","晝夜禱告"], correct:0}
    ]
  },
  { key:"worship", name:"敬拜", en:"WORSHIP", icon:"🎵", color:"#30a46c", graded:false, mode:"聽前奏猜歌 · 9 題",
    sub:"聽前奏，猜歌名，猜對即過關！",
    items:[
-     {kind:"worship", song:"滿有能力", audio:"敬拜_1.m4a"},
-     {kind:"worship", song:"你很特別", audio:"敬拜_2.m4a"},
-     {kind:"worship", song:"雲上太陽", audio:"敬拜_3.m4a"},
-     {kind:"worship", song:"有一位神", audio:"敬拜_4.m4a"},
-     {kind:"worship", song:"耶和華是我牧者", audio:"敬拜_5.m4a"},
-     {kind:"worship", song:"震動天地", audio:"敬拜_6.m4a"},
-     {kind:"worship", song:"耶穌愛你", audio:"敬拜_7.m4a"},
-     {kind:"worship", song:"I can do it", audio:"敬拜_8.m4a"},
-     {kind:"worship", song:"我們愛 [讓世界不一樣]", audio:"敬拜_9.m4a"}
+     {kind:"worship", song:"滿有能力", audio:"敬拜_1.m4a",
+      opts:["滿有能力","這一生最美的祝福","主是我力量","奇異恩典"], correct:0},
+     {kind:"worship", song:"你很特別", audio:"敬拜_2.m4a",
+      opts:["獨一無二","你很特別","我是你的寶貝","天父的孩子"], correct:1},
+     {kind:"worship", song:"雲上太陽", audio:"敬拜_3.m4a",
+      opts:["彩虹的約定","陽光和小雨","雲上太陽","藍天白雲"], correct:2},
+     {kind:"worship", song:"有一位神", audio:"敬拜_4.m4a",
+      opts:["有一位神","主你是我最知心的朋友","天父的花園","數算主恩"], correct:0},
+     {kind:"worship", song:"耶和華是我牧者", audio:"敬拜_5.m4a",
+      opts:["我要向高山舉目","平安如江河","耶和華是我牧者","每一天"], correct:2},
+     {kind:"worship", song:"震動天地", audio:"敬拜_6.m4a",
+      opts:["天搖地動","震動天地","興起發光","君王的心"], correct:1},
+     {kind:"worship", song:"耶穌愛你", audio:"敬拜_7.m4a",
+      opts:["耶穌愛你","耶穌愛我我知道","因著愛","彩虹下的約定"], correct:0},
+     {kind:"worship", song:"I can do it", audio:"敬拜_8.m4a",
+      opts:["We Are the World","I can do it","You Raise Me Up","This Is the Day"], correct:1},
+     {kind:"worship", song:"我們愛 [讓世界不一樣]", audio:"敬拜_9.m4a",
+      opts:["讓愛傳出去","我們愛","世界因愛而美麗","愛我們的家"], correct:1}
    ]
  },
  { key:"fellow", name:"教會團契", en:"FELLOWSHIP", icon:"🤝", color:"#3b82f6", graded:false, mode:"你了解隊友嗎 · 9 題",
@@ -258,15 +287,24 @@ const THEMES = [
  { key:"spirit", name:"聖靈的引導", en:"THE HOLY SPIRIT", icon:"🕊️", color:"#f4eedc", light:true, graded:false, mode:"看圖回答 · 9 題",
    sub:"看圖片，答案就在圖片中！",
    items:[
-     {kind:"image", img:"spirit_1.png", ask:"聖靈降在耶穌身上時，像哪一種白色的鳥？", a:"鴿子"},
-     {kind:"image", img:"spirit_2.png", ask:"五旬節聖靈降臨，有什麼東西落在各人身上，他們就被聖靈充滿？", a:"火焰（火／舌頭如火）"},
-     {kind:"image", img:"spirit_3.png", ask:"聖靈就像圖中「看不見卻感覺得到」的什麼？", a:"風"},
-     {kind:"image", img:"spirit_4.png", ask:"圖中老先知把什麼倒在少年頭上（象徵聖靈的膏抹）？", a:"膏油（角裡的油）"},
-     {kind:"image", img:"spirit_5.png", ask:"請說出任意 5 顆聖靈的果子。", a:"仁愛、喜樂、和平、忍耐、恩慈、良善、信實、溫柔、節制（共九種）"},
-     {kind:"image", img:"spirit_6.png", ask:"耶穌說，信他的人心裡要流出 OOOOO？", a:"活水的江河"},
-     {kind:"image", img:"spirit_7.png", ask:"神在曠野白天用「OO」引導以色列人的路？", a:"雲柱"},
-     {kind:"image", img:"spirit_8.png", ask:"請完成經文 詩篇 119:105：「祢的話是我腳OOO，是我OOOO。」", a:"腳前的燈／路上的光（完整：你的話是我腳前的燈，是我路上的光。）"},
-     {kind:"image", img:"spirit_9.png", ask:"聖靈引導我們，就像圖中走在前面帶領、走正確道路的誰？", a:"牧羊人（好牧人）"}
+     {kind:"image", img:"spirit_1.png", ask:"聖靈降在耶穌身上時，像哪一種白色的鳥？",
+      opts:["白鴿","天鵝","白鷺","海鷗"], correct:0},
+     {kind:"image", img:"spirit_2.png", ask:"五旬節聖靈降臨，有什麼東西落在各人身上，他們就被聖靈充滿？",
+      opts:["水","舌頭如火（火焰）","光束","羽毛"], correct:1},
+     {kind:"image", img:"spirit_3.png", ask:"聖靈就像圖中「看不見卻感覺得到」的什麼？",
+      opts:["風","電","影子","味道"], correct:0},
+     {kind:"image", img:"spirit_4.png", ask:"圖中老先知把什麼倒在少年頭上（象徵聖靈的膏抹）？",
+      opts:["清水","膏油","蜂蜜","香料"], correct:1},
+     {kind:"image", img:"spirit_5.png", ask:"看圖中的「聖靈果子樹」，下列哪一個『不是』聖靈的果子？",
+      opts:["恩慈","勇敢","溫柔","信實"], correct:1},
+     {kind:"image", img:"spirit_6.png", ask:"耶穌說，信他的人心裡要流出什麼？（看圖）",
+      opts:["活水的江河","喜樂的泉源","平安的溪流","生命的糧"], correct:0},
+     {kind:"image", img:"spirit_7.png", ask:"神在曠野「白天」用什麼引導以色列人的路？",
+      opts:["火柱","雲柱","星星","天使"], correct:1},
+     {kind:"image", img:"spirit_8.png", ask:"詩篇 119:105：「祢的話是我腳前的燈，是我＿＿＿＿。」空格是什麼？",
+      opts:["路上的光","心中的火","生命的水","前方的橋"], correct:0},
+     {kind:"image", img:"spirit_9.png", ask:"聖靈引導我們，就像圖中走在前面帶領、走正確道路的誰？",
+      opts:["農夫","牧羊人","獵人","商人"], correct:1}
    ]
  }
 ];
@@ -345,6 +383,17 @@ function publish(btn){
   const box = document.querySelector('#m-body .hidebox');
   if(box) box.classList.remove('show');
 }
+/* ---- 選擇題：顯示 A/B/C/D 選項與正解 ---- */
+const OPTL=['A','B','C','D'];
+function optsHtml(it){
+  if(!it.opts) return '';
+  return '<div class="opts">'+it.opts.map((o,i)=>'<div class="opt"><span class="ol">'+OPTL[i]+'</span><span>'+esc(o)+'</span></div>').join('')+'</div>';
+}
+function mcAns(it){
+  if(it.opts && typeof it.correct==='number')
+    return '✅ 正確答案：（'+OPTL[it.correct]+'）'+esc(it.opts[it.correct]);
+  return '✅ '+esc(it.a||'');
+}
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function openItem(i,btn){
@@ -363,22 +412,16 @@ function openItem(i,btn){
     html+='<div class="diff">'+stars(it.star)+'<span class="grade">'+GRADE[it.star]+'</span></div>';
   }
 
-  if(it.kind==="fill"){
-    html+='<div class="lbl" style="color:'+t.color+'">✏️ '+esc(it.label)+'</div>'+
-      '<div class="recite">'+esc(it.prompt)+'</div>'+
-      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
-      '<div class="togContent"><div class="ans verse">✅ '+esc(it.a)+
-      (it.full?'<span class="full">（完整：'+esc(it.full)+'）</span>':'')+'</div></div></div>';
-  } else if(it.kind==="card"){
+  if(it.kind==="card"){
     html+='<h3>🔊 請注意看／聽禱告詞，問題就在禱告中！</h3>'+
       '<div class="toggleBox show hidebox"><button class="btn beige" onclick="tog(this)">關主：隱藏／顯示禱告詞</button>'+
       '<div class="togContent"><div class="prayerbox">「'+esc(it.prayer)+'」'+(it.ref?'<span class="pref">—— '+esc(it.ref)+'</span>':'')+'</div></div></div>'+
       '<p class="audionote">禱告詞可先讓大家看、或由關主念出；按「公布題目」時會自動把禱告詞收起來。</p>'+
       '<div class="toggleBox"><button class="btn accent" onclick="publish(this)">📣 公布題目</button>'+
       '<div class="togContent">'+
-        '<div class="ask">❓ 提問：'+esc(it.ask)+'</div>'+
+        '<div class="ask">❓ 提問：'+esc(it.ask)+'</div>'+optsHtml(it)+
         '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
-        '<div class="togContent"><div class="ans">✅ '+esc(it.a)+'</div></div></div>'+
+        '<div class="togContent"><div class="ans">'+mcAns(it)+'</div></div></div>'+
       '</div></div>';
   } else if(it.kind==="image"){
     html+='<h3>👀 請注意看圖片，答案就在圖片中！</h3>'+
@@ -387,23 +430,23 @@ function openItem(i,btn){
       '<p class="audionote">先讓大家看圖片找答案；按「公布題目」時會自動把圖片收起來。</p>'+
       '<div class="toggleBox"><button class="btn accent" onclick="publish(this)">📣 公布題目</button>'+
       '<div class="togContent">'+
-        '<div class="ask">❓ 提問：'+esc(it.ask)+'</div>'+
+        '<div class="ask">❓ 提問：'+esc(it.ask)+'</div>'+optsHtml(it)+
         '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
-        '<div class="togContent"><div class="ans">✅ '+esc(it.a)+'</div></div></div>'+
+        '<div class="togContent"><div class="ans">'+mcAns(it)+'</div></div></div>'+
       '</div></div>';
   } else if(it.kind==="worship"){
     html+='<h3>🎧 聽前奏，猜歌名！</h3>'+
-      '<audio controls preload="none" src="audio/'+it.audio+'"></audio>'+
-      '<div class="cond">🎯 完成條件：猜對歌名。</div>'+
-      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏歌名</button>'+
-      '<div class="togContent"><div class="ans">🎵 '+esc(it.song)+'</div></div></div>';
+      '<audio controls preload="none" src="audio/'+it.audio+'"></audio>'+optsHtml(it)+
+      '<div class="cond">🎯 完成條件：從 A/B/C/D 選出正確歌名。</div>'+
+      '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
+      '<div class="togContent"><div class="ans">'+mcAns(it)+'</div></div></div>';
   } else if(it.kind==="fellow"){
     html+='<h3>'+(it.mark?'🚩 ':'')+esc(it.q)+'</h3>'+
       '<div class="cond fellow">✅ '+esc(it.cond)+'</div>';
-  } else { /* plain / write */
-    html+='<h3>'+esc(it.q||it.prompt)+'</h3>'+
+  } else { /* plain（選擇題） */
+    html+='<h3>'+esc(it.q||it.prompt)+'</h3>'+optsHtml(it)+
       '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
-      '<div class="togContent"><div class="ans">✅ '+esc(it.a)+'</div></div></div>';
+      '<div class="togContent"><div class="ans">'+mcAns(it)+'</div></div></div>';
   }
 
   document.getElementById('m-body').innerHTML=html;
