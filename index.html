@@ -258,24 +258,15 @@ const THEMES = [
  { key:"worship", name:"敬拜", en:"WORSHIP", icon:"🎵", color:"#30a46c", graded:false, mode:"聽前奏猜歌 · 9 題",
    sub:"聽前奏，猜歌名，猜對即過關！",
    items:[
-     {kind:"worship", song:"滿有能力", audio:"敬拜_1.m4a",
-      opts:["滿有能力","這一生最美的祝福","主是我力量","奇異恩典"], correct:0},
-     {kind:"worship", song:"你很特別", audio:"敬拜_2.m4a",
-      opts:["獨一無二","你很特別","我是你的寶貝","天父的孩子"], correct:1},
-     {kind:"worship", song:"雲上太陽", audio:"敬拜_3.m4a",
-      opts:["彩虹的約定","陽光和小雨","雲上太陽","藍天白雲"], correct:2},
-     {kind:"worship", song:"有一位神", audio:"敬拜_4.m4a",
-      opts:["主你是我最知心的朋友","天父的花園","數算主恩","有一位神"], correct:3},
-     {kind:"worship", song:"耶和華是我牧者", audio:"敬拜_5.m4a",
-      opts:["我要向高山舉目","平安如江河","耶和華是我牧者","每一天"], correct:2},
-     {kind:"worship", song:"震動天地", audio:"敬拜_6.m4a",
-      opts:["天搖地動","興起發光","君王的心","震動天地"], correct:3},
-     {kind:"worship", song:"耶穌愛你", audio:"敬拜_7.m4a",
-      opts:["耶穌愛你","耶穌愛我我知道","因著愛","彩虹下的約定"], correct:0},
-     {kind:"worship", song:"I can do it", audio:"敬拜_8.m4a",
-      opts:["We Are the World","I can do it","You Raise Me Up","This Is the Day"], correct:1},
-     {kind:"worship", song:"我們愛 [讓世界不一樣]", audio:"敬拜_9.m4a",
-      opts:["讓愛傳出去","我們愛","世界因愛而美麗","愛我們的家"], correct:1}
+     {kind:"worship", song:"滿有能力", audio:"敬拜_1.m4a"},
+     {kind:"worship", song:"你很特別", audio:"敬拜_2.m4a"},
+     {kind:"worship", song:"雲上太陽", audio:"敬拜_3.m4a"},
+     {kind:"worship", song:"有一位神", audio:"敬拜_4.m4a"},
+     {kind:"worship", song:"耶和華是我牧者", audio:"敬拜_5.m4a"},
+     {kind:"worship", song:"震動天地", audio:"敬拜_6.m4a"},
+     {kind:"worship", song:"耶穌愛你", audio:"敬拜_7.m4a"},
+     {kind:"worship", song:"I can do it", audio:"敬拜_8.m4a"},
+     {kind:"worship", song:"我們愛 [讓世界不一樣]", audio:"敬拜_9.m4a"}
    ]
  },
  { key:"fellow", name:"教會團契", en:"FELLOWSHIP", icon:"🤝", color:"#3b82f6", graded:false, mode:"你了解隊友嗎 · 9 題",
@@ -450,10 +441,10 @@ function openItem(i,btn){
     html+='<div class="qleft">'+diff+
       '<div class="lead">🎧 聽前奏，猜歌名！</div>'+
       '<audio controls preload="none" src="audio/'+it.audio+'"></audio>'+
-      '<div class="cond">🎯 完成條件：從 A/B/C/D 選出正確歌名。</div>'+
-      '</div><div class="qright">'+optsHtml(it)+
+      '<div class="cond">🎯 完成條件：聽出前奏、正確說出歌名即過關。</div>'+
+      '</div><div class="qright">'+
         '<div class="toggleBox"><button class="btn ghost" onclick="tog(this)">關主：顯示／隱藏答案</button>'+
-        '<div class="togContent"><div class="ans">'+mcAns(it)+'</div></div></div>'+
+        '<div class="togContent"><div class="ans">✅ 答案：'+esc(it.song)+'</div></div></div>'+
       '</div>';
   } else if(it.kind==="fellow"){
     html+='<div class="qleft"><h3>'+(it.mark?'🚩 ':'')+esc(it.q)+'</h3></div>'+
