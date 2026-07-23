@@ -109,7 +109,7 @@
   .recite{background:#0f2036;border:1px solid #2b466a;border-radius:16px;
           padding:20px 26px;line-height:1.9;font-size:clamp(22px,2.3vw,38px);color:#e9eff7;margin:14px 0;}
   .prayerbox{background:#132a44;border:1px solid #2c4f87;border-radius:16px;
-          padding:22px 30px;line-height:1.85;font-size:clamp(22px,2.3vw,38px);color:#e7f0fb;margin:14px 0;font-style:italic;}
+          padding:18px 24px;line-height:1.7;font-size:clamp(18px,1.9vw,30px);color:#e7f0fb;margin:12px 0;font-style:normal;}
   .prayerbox .pref{display:block;margin-top:14px;color:var(--muted);font-size:clamp(16px,1.5vw,24px);font-style:normal;}
   .ask{font-weight:800;font-size:clamp(22px,2.3vw,36px);margin:10px 0 6px;}
   img.qimg{width:100%;max-height:50vh;object-fit:contain;border-radius:14px;border:1px solid #2b466a;margin:10px 0;display:block;background:#0f2036;}
@@ -182,52 +182,52 @@
 <script>
 /* ================= DATA（版本 B） ================= */
 const THEMES = [
- { key:"pray", name:"禱告", en:"PRAYER", icon:"🙏", color:"#e5484d", graded:true, mode:"難度分級 · 9 題",
-   sub:"難度分三段：★ 題 1–3（1·2 年級）、★★ 題 4–6（3·4 年級）、★★★ 題 7–9（5·6 年級）。",
+ { key:"pray", name:"禱告", en:"PRAYER", icon:"🙏", color:"#e5484d", graded:false, mode:"禱告詞卡 · 9 題",
+   sub:"每一題都是一段聖經中的禱告；先讀（或聽）禱告詞，再從中找出答案。",
    items:[
-     {star:1, kind:"card",
-      prayer:"我們在天上的父，願人都尊你的名為聖。願你的國降臨，願你的旨意行在地上，如同行在天上。",
-      ref:"馬太福音 6:9–10（主禱文）",
-      ask:"主禱文一開始，是怎麼稱呼神的？",
-      opts:["我們在天上的父","萬軍之耶和華","創造天地的主","以上皆是"], correct:0},
-     {star:1, kind:"card",
-      prayer:"萬軍之耶和華啊，你若垂顧婢女的苦情……賜我一個兒子，我必使他終身歸與耶和華。",
-      ref:"撒母耳記上 1:11（哈拿的禱告）",
+     {kind:"card",
+      prayer:"我們在天上的父，願人都尊你的名為聖。願你的國降臨，願你的旨意行在地上，如同行在天上。我們日用的飲食，今日賜給我們。免我們的債，如同我們免了人的債。不叫我們遇見試探，救我們脫離兇惡。因為國度、權柄、榮耀，全是你的，直到永遠。阿們。",
+      ref:"馬太福音 6:9–13（主禱文）",
+      ask:"主禱文記載在聖經的哪一處？",
+      opts:["馬太福音第 6 章","創世記第 1 章","詩篇第 23 篇","啟示錄第 21 章"], correct:0},
+     {kind:"card",
+      prayer:"哈拿心裡愁苦，就痛痛哭泣，向耶和華祈禱，許願說：「萬軍之耶和華啊，你若垂顧婢女的苦情，眷念不忘婢女，賜我一個兒子，我必使他終身歸與耶和華，不用剃頭刀剃他的頭。」哈拿在耶和華面前不住地祈禱，她心中默禱，只動嘴唇，不出聲音，因此以利以為她喝醉了。",
+      ref:"撒母耳記上 1:10–15（哈拿的禱告）",
       ask:"哈拿向神求什麼？",
       opts:["財富","一個兒子","長壽","智慧"], correct:1},
-     {star:1, kind:"card",
-      prayer:"神啊，開恩可憐我這個罪人！",
-      ref:"路加福音 18:13（稅吏的禱告）",
-      ask:"稅吏低著頭、捶著胸，向神說了什麼？",
-      opts:["神啊，我感謝你","神啊，求你賜福給我","神啊，開恩可憐我這個罪人","神啊，求你聽我禱告"], correct:2},
-     {star:2, kind:"card",
-      prayer:"神啊，求你為我造清潔的心，使我裡面重新有正直的靈。",
-      ref:"詩篇 51:10（大衛悔罪的禱告）",
+     {kind:"card",
+      prayer:"耶穌向那些仗著自己是義人、藐視別人的人講了這個比喻：有兩個人上殿裡去禱告，一個是法利賽人，一個是稅吏。法利賽人站著，自言自語地禱告說：「神啊，我感謝你，我不像別人勒索、不義、姦淫，也不像這個稅吏。我一個禮拜禁食兩次，凡我所得的都捐上十分之一。」那稅吏遠遠地站著，連舉目望天也不敢，只捶著胸說：「神啊，開恩可憐我這個罪人！」",
+      ref:"路加福音 18:9–14（法利賽人與稅吏）",
+      ask:"那稅吏遠遠站著、捶著胸，向神說了什麼？",
+      opts:["神啊，我感謝你，我不像別人","神啊，求你賜福給我","神啊，開恩可憐我這個罪人","神啊，求你聽我禱告"], correct:2},
+     {kind:"card",
+      prayer:"神啊，求你按你的慈愛憐恤我，按你豐盛的慈悲塗抹我的過犯。求你將我的罪孽洗除淨盡，並潔除我的罪。因為我知道我的過犯，我的罪常在我面前。神啊，求你為我造清潔的心，使我裡面重新有正直的靈。不要丟棄我，使我離開你的面；不要從我收回你的聖靈。",
+      ref:"詩篇 51:1–11（大衛悔罪的禱告）",
       ask:"大衛求神為他造一顆怎樣的心？",
       opts:["剛強的心","喜樂的心","智慧的心","清潔的心"], correct:3},
-     {star:2, kind:"card",
-      prayer:"求你賜我智慧，可以判斷你的民，能辨別是非。",
-      ref:"列王紀上 3:9（所羅門的禱告）",
+     {kind:"card",
+      prayer:"在基遍，夜間的夢中，耶和華向所羅門顯現，說：「你願我賜你什麼，你可以求。」所羅門說：「耶和華我的神啊，如今你使僕人接續我父親大衛作王；但我是幼童，不知道應當怎樣出入。所以求你賜我智慧，可以判斷你的民，能辨別是非；不然，誰能判斷這眾多的民呢？」",
+      ref:"列王紀上 3:5–9（所羅門的禱告）",
       ask:"所羅門沒有求財富或長壽，他向神求什麼？",
       opts:["能辨別是非的智慧","強大的軍隊","更多的財寶","以上皆是"], correct:0},
-     {star:2, kind:"card",
-      prayer:"甚願你賜福與我，擴張我的境界，願你的手常與我同在，保佑我不遭患難。",
-      ref:"歷代志上 4:10（雅比斯的禱告）",
+     {kind:"card",
+      prayer:"雅比斯比他眾弟兄更尊貴，他母親給他起名叫雅比斯，意思說：我生他甚是痛苦。雅比斯求告以色列的神說：「甚願你賜福與我，擴張我的境界，願你的手常與我同在，保佑我不遭患難，不受艱苦。」神就應允他所求的。",
+      ref:"歷代志上 4:9–10（雅比斯的禱告）",
       ask:"雅比斯求神賜福，並且「擴張」他的什麼？",
       opts:["財產","名聲","境界（地界）","家族人數"], correct:2},
-     {star:3, kind:"card",
-      prayer:"我父啊，倘若可行，求你叫這杯離開我；然而不要照我的意思，只要照你的意思。",
-      ref:"馬太福音 26:39（耶穌在客西馬尼園的禱告）",
+     {kind:"card",
+      prayer:"耶穌同門徒來到一個地方，名叫客西馬尼，就憂愁起來，極其難過，對他們說：「我心裡甚是憂傷，幾乎要死。」他就稍往前走，俯伏在地禱告說：「我父啊，倘若可行，求你叫這杯離開我；然而不要照我的意思，只要照你的意思。」第二次又去禱告說：「我父啊，這杯若不能離開我，必要我喝，就願你的旨意成全。」",
+      ref:"馬太福音 26:36–42（客西馬尼園的禱告）",
       ask:"耶穌禱告說「不要照我的意思」，要照誰的意思？",
       opts:["自己的意思","門徒的意思","父神的意思","眾人的意思"], correct:2},
-     {star:3, kind:"card",
-      prayer:"耶和華啊，求你應允我，從天上降下火來，使這民知道你─耶和華─是神！",
+     {kind:"card",
+      prayer:"到了獻晚祭的時候，先知以利亞近前來，說：「亞伯拉罕、以撒、以色列的神，耶和華啊，求你今日使人知道你是以色列的神，也知道我是你的僕人，又是奉你的命行這一切事。耶和華啊，求你應允我，應允我！使這民知道你─耶和華─是神。」於是，耶和華降下火來，燒盡了燔祭、木柴、石頭、塵土，又燒乾溝裡的水。",
       ref:"列王紀上 18:36–38（以利亞在迦密山的禱告）",
       ask:"以利亞禱告後，神從天上降下什麼，證明祂是真神？",
       opts:["天使","火","閃電","大水"], correct:1},
-     {star:3, kind:"card",
-      prayer:"父啊，赦免他們！因為他們所做的，他們不曉得。",
-      ref:"路加福音 23:34（耶穌在十字架上的禱告）",
+     {kind:"card",
+      prayer:"到了一個地方，名叫髑髏地，他們就在那裡把耶穌釘在十字架上，又釘了兩個犯人：一個在左邊，一個在右邊。當下耶穌說：「父啊，赦免他們！因為他們所做的，他們不曉得。」兵丁就拈鬮分他的衣服。",
+      ref:"路加福音 23:33–34（耶穌在十字架上的禱告）",
       ask:"耶穌被釘十字架時，為傷害祂的人禱告，求父做什麼？",
       opts:["懲罰他們","審判他們","赦免他們","忘記他們"], correct:2}
    ]
@@ -422,7 +422,7 @@ function openItem(i,btn){
     html+='<div class="qleft">'+diff+
       '<div class="lead">🔊 請注意看／聽禱告詞，問題就在禱告中！</div>'+
       '<div class="toggleBox show hidebox"><button class="btn beige" onclick="tog(this)">關主：隱藏／顯示禱告詞</button>'+
-      '<div class="togContent"><div class="prayerbox">「'+esc(it.prayer)+'」'+(it.ref?'<span class="pref">—— '+esc(it.ref)+'</span>':'')+'</div></div></div>'+
+      '<div class="togContent"><div class="prayerbox">'+esc(it.prayer)+(it.ref?'<span class="pref">—— '+esc(it.ref)+'</span>':'')+'</div></div></div>'+
       '<p class="audionote">禱告詞可先讓大家看、或由關主念出；按「公布題目」時會自動把禱告詞收起來。</p>'+
       '</div><div class="qright">'+
         '<div class="toggleBox"><button class="btn accent" onclick="publish(this)">📣 公布題目</button>'+
