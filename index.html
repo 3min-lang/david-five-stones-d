@@ -78,6 +78,35 @@
   .num.used::after{content:"已選";position:absolute;bottom:8px;font-size:12px;font-weight:700;letter-spacing:1px;}
   .num .check{position:absolute;top:6px;right:10px;font-size:18px;display:none;}
   .num.used .check{display:block;color:#5ad18f;}
+  /* ---- 隊伍標記：黑隊／白隊（灰＝平手，沿用 used 灰底） ---- */
+  .num.mk-black{background:#0d1117 !important;color:#eaf1fb !important;border:3px solid #eaf1fb !important;box-shadow:none;}
+  .num.mk-white{background:#f4f7fb !important;color:#1f2d44 !important;border:3px solid #aebbcd !important;box-shadow:none;}
+  .num.mk-black::after{content:"黑隊";position:absolute;bottom:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#eaf1fb;}
+  .num.mk-white::after{content:"白隊";position:absolute;bottom:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#1f2d44;}
+  .num.mk-white .check{color:#1c8a4e;}
+  /* ---- 格子左下角 3 顆切換圓點 ---- */
+  .tdots{position:absolute;left:9px;bottom:7px;display:flex;gap:5px;z-index:2;}
+  .tdot{width:13px;height:13px;border-radius:50%;cursor:pointer;border:2px solid #90a4bd;transition:.12s;}
+  .tdot:hover{transform:scale(1.35);}
+  .tdot.t-black{background:#0d1117;}
+  .tdot.t-white{background:#f4f7fb;}
+  .tdot.t-gray{background:#7e94ad;}
+  .tdot.on{transform:scale(1.25);box-shadow:0 0 0 3px #ffd76a;border-color:#fff;}
+  /* ---- 計分板 ---- */
+  .scoreboard{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 20px;
+              font-size:15px;font-weight:800;letter-spacing:1px;}
+  .scoreboard .stt{color:var(--muted);font-weight:700;letter-spacing:2px;}
+  .scoreboard span.pill{display:inline-flex;align-items:center;gap:8px;background:#132339;border:1px solid #2b466a;
+                        border-radius:999px;padding:6px 18px;color:#dce8f8;}
+  .sw{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid #90a4bd;}
+  .sw.b{background:#0d1117;} .sw.w{background:#f4f7fb;} .sw.g{background:#7e94ad;}
+  /* ---- 彈窗底部計分列 ---- */
+  .mscore{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+  .mscore .lbl{color:var(--muted);font-size:clamp(14px,1.3vw,20px);font-weight:700;}
+  .sbtn{cursor:pointer;border-radius:999px;padding:8px 22px;font-weight:800;font-family:inherit;
+        font-size:clamp(14px,1.4vw,22px);border:2px solid #44557a;background:#16273f;color:#cfe0f5;transition:.12s;}
+  .sbtn:hover{filter:brightness(1.25);}
+  .sbtn.on{border-color:#ffd76a;box-shadow:0 0 0 3px rgba(255,215,106,.35);color:#fff;}
   .legend{text-align:center;color:var(--muted);font-size:13px;margin-top:18px;line-height:1.8;}
 
   .overlay{position:fixed;inset:0;background:rgba(6,12,22,.85);backdrop-filter:blur(3px);
@@ -162,6 +191,7 @@
     </div>
     <div class="cat-title"><span class="dot" id="g-dot"></span><h2 id="g-h2"></h2></div>
     <p class="cat-sub" id="g-sub"></p>
+    <div class="scoreboard" id="g-score"></div>
     <div class="grid" id="g-grid"></div>
     <div class="legend" id="g-legend"></div>
   </section>
@@ -175,7 +205,7 @@
       <button class="x" onclick="closeModal()">✕</button>
     </div>
     <div class="body" id="m-body"></div>
-    <div class="mfoot"><button class="btn ghost" onclick="closeModal()">⟵ 返回號碼選單</button></div>
+    <div class="mfoot"><div class="mscore" id="m-score"></div><button class="btn ghost" onclick="closeModal()">⟵ 返回號碼選單</button></div>
   </div>
 </div>
 
@@ -317,6 +347,33 @@ const KEY="stones_visited_D_v1";
 let visited = JSON.parse(localStorage.getItem(KEY) || "{}");
 function saveVisited(){ localStorage.setItem(KEY, JSON.stringify(visited)); }
 function vkey(k,n){ return k+"_"+n; }
+/* 隊伍標記：'black' | 'white' | 'tie'（沒有值＝尚未計分） */
+const MKEY="stones_marks_D_v1";
+let marks = JSON.parse(localStorage.getItem(MKEY) || "{}");
+function saveMarks(){ localStorage.setItem(MKEY, JSON.stringify(marks)); }
+/* 設定／取消標記：再點一次同一色＝取消 */
+function setMark(k,i,val){
+  const key=vkey(k,i);
+  if(marks[key]===val) delete marks[key]; else marks[key]=val;
+  visited[key]=true;
+  saveMarks(); saveVisited(); openTheme(k);
+}
+function scoreCount(){
+  let b=0,w=0,g=0;
+  THEMES.forEach(t=>t.items.forEach((_,i)=>{
+    const m=marks[vkey(t.key,i)];
+    if(m==='black') b++; else if(m==='white') w++; else if(m==='tie') g++;
+  }));
+  return {b,w,g};
+}
+function renderScore(){
+  const el=document.getElementById('g-score'); if(!el) return;
+  const s=scoreCount();
+  el.innerHTML='<span class="stt">五主題總計</span>'+
+    '<span class="pill"><i class="sw b"></i>黑隊 '+s.b+'</span>'+
+    '<span class="pill"><i class="sw w"></i>白隊 '+s.w+'</span>'+
+    '<span class="pill"><i class="sw g"></i>平手 '+s.g+'</span>';
+}
 function theme(k){ return THEMES.find(t=>t.key===k); }
 
 /* ================= NAV ================= */
@@ -351,27 +408,40 @@ function openTheme(k){
   document.getElementById('g-dot').style.background=t.color;
   document.getElementById('g-sub').textContent=t.sub;
   document.getElementById('g-legend').innerHTML =
-    "點擊號碼查看內容；點過的號碼會變灰並標示「已選」。點錯了可用上方「清除此主題已選」。";
+    "點擊號碼查看內容；點過的號碼會變灰並標示「已選」。<br>" +
+    "每格左下角 <b>⚫⚪⬜</b> 可標記哪一隊答對：黑隊變黑格、白隊變白格、灰＝平手／還原；再點一次同一色可取消。" +
+    "題目彈窗下方也能直接計分。要全部歸零用上方「清除此主題已選」。";
   const grid=document.getElementById('g-grid'); grid.innerHTML="";
   t.items.forEach((it,i)=>{
     const b=document.createElement('button');
     b.className='num'; b.style.background=t.color;
     if(t.light) b.classList.add('light');
+    const mk=marks[vkey(k,i)]||'';
     let inner='<span class="check">✓</span><span class="n">'+(i+1)+'</span>';
     if(t.graded && it.star) inner+='<span class="stars">'+stars(it.star)+'</span>';
+    inner+='<span class="tdots">'+
+      '<span class="tdot t-black'+(mk==='black'?' on':'')+'" data-v="black" title="黑隊答對"></span>'+
+      '<span class="tdot t-white'+(mk==='white'?' on':'')+'" data-v="white" title="白隊答對"></span>'+
+      '<span class="tdot t-gray'+(mk==='tie'?' on':'')+'" data-v="tie" title="平手／還原"></span>'+
+      '</span>';
     b.innerHTML=inner;
     if(visited[vkey(k,i)]) b.classList.add('used');
+    if(mk==='black'||mk==='white') b.classList.add('mk-'+mk);
     b.onclick=()=>openItem(i,b);
+    b.querySelectorAll('.tdot').forEach(d=>{
+      d.onclick=(e)=>{ e.stopPropagation(); setMark(k,i,d.dataset.v); };
+    });
     grid.appendChild(b);
   });
+  renderScore();
   go('grid');
 }
 
 function clearCurrent(){
   const t=theme(curKey);
-  if(!confirm('確定清除「'+t.name+'」的所有已選記錄嗎？')) return;
-  t.items.forEach((_,i)=>delete visited[vkey(curKey,i)]);
-  saveVisited(); openTheme(curKey);
+  if(!confirm('確定清除「'+t.name+'」的所有已選與計分記錄嗎？')) return;
+  t.items.forEach((_,i)=>{ delete visited[vkey(curKey,i)]; delete marks[vkey(curKey,i)]; });
+  saveVisited(); saveMarks(); openTheme(curKey);
 }
 
 /* ================= MODAL ================= */
@@ -381,6 +451,20 @@ function publish(btn){
   btn.parentElement.classList.toggle('show');
   const box = document.querySelector('#m-body .hidebox');
   if(box) box.classList.remove('show');
+}
+/* ---- 彈窗底部：這題誰答對（同一顆再按一次＝取消） ---- */
+function modalScoreHtml(k,i){
+  const mk=marks[vkey(k,i)]||'';
+  return '<span class="lbl">這題誰答對？</span>'+
+    '<button class="sbtn'+(mk==='black'?' on':'')+'" onclick="markFromModal(\'black\','+i+')">⚫ 黑隊</button>'+
+    '<button class="sbtn'+(mk==='white'?' on':'')+'" onclick="markFromModal(\'white\','+i+')">⚪ 白隊</button>'+
+    '<button class="sbtn'+(mk==='tie'?' on':'')+'" onclick="markFromModal(\'tie\','+i+')">⬜ 平手</button>';
+}
+function markFromModal(val,i){
+  const key=vkey(curKey,i);
+  if(marks[key]===val) delete marks[key]; else marks[key]=val;
+  visited[key]=true; saveMarks(); saveVisited();
+  document.getElementById('m-score').innerHTML=modalScoreHtml(curKey,i);
 }
 /* ---- 選擇題：顯示 A/B/C/D 選項與正解 ---- */
 const OPTL=['A','B','C','D'];
@@ -466,6 +550,7 @@ function openItem(i,btn){
   html+='</div>';
 
   document.getElementById('m-body').innerHTML=html;
+  document.getElementById('m-score').innerHTML=modalScoreHtml(curKey,i);
   document.getElementById('overlay').classList.add('active');
 }
 function closeModal(){
@@ -476,8 +561,8 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeModal(); });
 
 /* ================= RESET ALL ================= */
 function resetAll(){
-  if(confirm('確定要清除「所有主題」的已選記錄嗎？')){
-    visited={}; saveVisited(); alert('已重設！');
+  if(confirm('確定要清除「所有主題」的已選與計分記錄嗎？')){
+    visited={}; marks={}; saveVisited(); saveMarks(); alert('已重設！');
   }
 }
 
